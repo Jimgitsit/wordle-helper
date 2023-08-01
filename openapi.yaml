@@ -1,0 +1,161 @@
+openapi: 3.0.1
+info:
+  title: Wordle Helper Plugin
+  description: A plugin for assisting with playing wordle.
+  version: 'v1'
+servers:
+  - url: http://localhost:5003
+paths:
+  /charToPos/{word}/{char}:
+    get:
+      operationId: charToPos
+      summary: Get the position of a character in a word. Return the position or 0 if the character is not in the word.
+      parameters:
+      - in: path
+        name: word
+        schema:
+            type: string
+        required: true
+        description: The word to check.
+      - in: path
+        name: char
+        schema:
+            type: string
+        required: true
+        description: The character to find the position of in the word.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/charToPosResponse'
+  /posToChar/{word}/{pos}:
+    get:
+      operationId: posToChar
+      summary: Get the character in a word at the given position.
+      parameters:
+        - in: path
+          name: word
+          schema:
+            type: string
+          required: true
+          description: The word to check.
+        - in: path
+          name: pos
+          schema:
+            type: integer or string
+          required: true
+          description: The position of the desired character in the word. May be in numerical or textual format. ie. 1 or "first".
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/posToCharResponse'
+  /numToWord/{num}:
+    get:
+      operationId: numToWord
+      summary: Return the textual representation of a number. ie. 1 -> "first"
+      parameters:
+        - in: path
+          name: num
+          schema:
+            type: integer
+          required: true
+          description: The number to convert to a word.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/numToWordResponse'
+  /wordToNum/{word}:
+    get:
+      operationId: wordToNum
+      summary: Return the numerical representation of a word. ie. "first" -> 1
+      parameters:
+        - in: path
+          name: word
+          schema:
+            type: string
+          required: true
+          description: The word to convert to a number.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/wordToNumResponse'
+  /getNextWord/{attempts}:
+    get:
+      operationId: getNextWord
+      summary: Return the most common word that matches the criteria in the "attempts" parameter.
+      parameters:
+        - in: path
+          name: attempts
+          schema:
+            type: string
+          required: true
+          description: Comma separated list of all attempts at guessing the word and the feedback from the guess. The feedback should be codified as follows. x=letter is not in the word. ~=letter is in the word but not in the correct position. ^=letter is in the word and in the correct position. Example where the secret word is TABLE, BREAD:xx~~x,WATER:x^~~x
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getNextWordResponse'
+  /getFirstWord:
+    get:
+      operationId: getFirstWord
+      summary: Returns instructions to use for deciding on the first word.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/getFirstWordResponse'
+
+components:
+  schemas:
+    charToPosResponse:
+      type: array
+      items:
+        type: integer
+        description: The position(s) of the character in the word in numerical and textual format.
+    posToCharResponse:
+      type: object
+      properties:
+        character:
+          type: string
+          description: The character in the given position.
+    numToWordResponse:
+      type: object
+      properties:
+        word:
+          type: string
+          description: The textual representation of the number.
+    wordToNumResponse:
+      type: object
+      properties:
+        num:
+          type: string
+          description: The numerical representation of the word.
+    getNextWordResponse:
+      type: object
+      properties:
+        words:
+          type: array
+          items:
+            type: string
+            description: Return the most common word that matches the criteria in the "attempts" parameter.
+    getFirstWordResponse:
+      type: object
+      properties:
+        instructions:
+          type: string
+          description: Returns instructions to use for deciding on the first word.

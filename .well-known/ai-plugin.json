@@ -1,0 +1,19 @@
+{
+    "schema_version": "v1",
+    "name_for_human": "Wordle Helper Plugin (no auth)",
+    "name_for_model": "wordlehelper",
+    "description_for_human": "Plugin for assisting with playing wordle.",
+    "description_for_model": "Plugin for assisting with playing wordle.",
+    "auth": {
+      "type": "none"
+    },
+    "api": {
+      "type": "openapi",
+      "url": "http://localhost:5003/openapi.yaml",
+      "is_user_authenticated": false
+    },
+    "logo_url": "http://localhost:5003/logo.png",
+    "contact_email": "jim.mcgowen462@gmail.com",
+    "legal_info_url": "http://example.com/legal"
+  }
+  
