@@ -7,7 +7,7 @@ import random
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client["GFG"]
+db = client["wordle-helper"]
 collection = db["all_words"]
 
 @app.get("/charToPos/<string:word>/<string:char>")
